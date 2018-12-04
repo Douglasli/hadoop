@@ -310,6 +310,8 @@ public class Merger {
       
       if (mapOutputsCounter != null) {
         mapOutputsCounter.increment(1);
+        //test for output
+        System.out.println("hadoop mapred merge: " + mapOutputsCounter);
       }
     }
     

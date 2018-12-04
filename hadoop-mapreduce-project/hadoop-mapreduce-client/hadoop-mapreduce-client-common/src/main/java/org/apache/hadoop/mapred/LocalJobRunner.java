@@ -625,6 +625,8 @@ public class LocalJobRunner implements ClientProtocol {
 
         partialMapProgress[mapTaskIndex] = taskStatus.getProgress();
         mapCounters[mapTaskIndex] = taskStatus.getCounters();
+        System.out.println("/Volumes/sambashare/Development/hadoop-2.9.1-src/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-common/src/main/java/org/apache/hadoop/mapred/LocalJobRunner.java");
+        System.out.println("mapCounters");
 
         float partialProgress = 0.0f;
         for (float f : partialMapProgress) {
@@ -661,6 +663,8 @@ public class LocalJobRunner implements ClientProtocol {
 
       Counters current = new Counters();
       for (Counters c : mapCounters) {
+        //output counter
+        System.out.println("counter map reduce "+c);
         current = Counters.sum(current, c);
       }
 

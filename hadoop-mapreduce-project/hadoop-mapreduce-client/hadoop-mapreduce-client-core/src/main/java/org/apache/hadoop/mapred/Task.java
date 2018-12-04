@@ -1422,6 +1422,8 @@ abstract public class Task implements Writable, Configurable {
     public synchronized void collect(K key, V value)
         throws IOException {
       outCounter.increment(1);
+//      System.out.println("/Volumes/sambashare/Development/hadoop-2.9.1-src/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/Task.java");
+//      System.out.println("outCounter :"+outCounter.getValue());
       writer.append(key, value);
       if ((outCounter.getValue() % progressBar) == 0) {
         progressable.progress();
@@ -1462,6 +1464,10 @@ abstract public class Task implements Writable, Configurable {
       key = nextKey;
       nextKey = null; // force new instance creation
       hasNext = more;
+      System.out.println("/Volumes/sambashare/Development/hadoop-2.9.1-src/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/Task.java");
+      System.out.println("Task.ValuesIterator.ValuesIterator");
+      System.out.println("key: "+key);
+      System.out.println("value: "+value);
     }
 
     RawKeyValueIterator getRawIterator() { return in; }

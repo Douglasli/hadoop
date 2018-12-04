@@ -123,6 +123,7 @@ public class Mapper<KEYIN, VALUEIN, KEYOUT, VALUEOUT> {
   protected void map(KEYIN key, VALUEIN value, 
                      Context context) throws IOException, InterruptedException {
     context.write((KEYOUT) key, (VALUEOUT) value);
+    System.out.println("Mapreduce Mapper");
   }
 
   /**
