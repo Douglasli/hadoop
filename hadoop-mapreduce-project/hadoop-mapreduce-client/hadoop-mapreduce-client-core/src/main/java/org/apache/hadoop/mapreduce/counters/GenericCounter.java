@@ -64,11 +64,6 @@ public class GenericCounter extends AbstractCounter {
     displayName = in.readBoolean() ? 
         StringInterner.weakIntern(Text.readString(in)) : name;
     value = WritableUtils.readVLong(in);
-//    //try to get counter for each task
-//    System.out.println("/Volumes/sambashare/Development/hadoop-2.9.1-src/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/counters/GenericCounter.java");
-//    System.out.println("name "+name);
-//    System.out.println("displayName "+displayName);
-//    System.out.println("value "+value);
   }
 
   /**

@@ -93,7 +93,6 @@ public class FilterOutputFormat <K,V> extends OutputFormat<K, V> {
     @Override
     public void write(K key, V value) throws IOException, InterruptedException {
       getRawWriter().write(key, value);
-      System.out.println("mapreduce lib output FilterOutputFormat");
     }
 
     @Override
@@ -104,6 +103,7 @@ public class FilterOutputFormat <K,V> extends OutputFormat<K, V> {
     
     private RecordWriter<K,V> getRawWriter() throws IOException {
       if (rawWriter == null) {
+        throw new IOException("Record Writer not set for FilterRecordWriter");
       }
       return rawWriter;
     }

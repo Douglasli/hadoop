@@ -325,8 +325,6 @@ public abstract class TaskStatus implements Writable, Cloneable {
    * Get task's counters.
    */
   public Counters getCounters() {
-//    System.out.println("/Volumes/sambashare/Development/hadoop-2.9.1-src/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/TaskStatus.java");
-//    System.out.println("TaskStatue.getCounters");
     return counters;
   }
   /**
@@ -383,8 +381,6 @@ public abstract class TaskStatus implements Writable, Cloneable {
     setProgress(progress);
     setStateString(state);
     setCounters(counters);
-    System.out.println("/Volumes/sambashare/Development/hadoop-2.9.1-src/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/TaskStatus.java");
-    System.out.println("TaskStatus.statusUpdate");
   }
   
   /**
@@ -410,8 +406,6 @@ public abstract class TaskStatus implements Writable, Cloneable {
     this.phase = status.getPhase();
     this.counters = status.getCounters();
     this.outputSize = status.outputSize;
-//    System.out.println("/Volumes/sambashare/Development/hadoop-2.9.1-src/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapred/TaskStatus.java");
-//    System.out.println("statusUpdate "+this.counters );
   }
 
   /**

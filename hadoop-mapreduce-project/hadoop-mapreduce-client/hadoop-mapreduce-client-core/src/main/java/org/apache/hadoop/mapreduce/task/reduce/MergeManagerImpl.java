@@ -602,14 +602,7 @@ public class MergeManagerImpl<K, V> implements MergeManager<K, V> {
       CombineValuesIterator values = new CombineValuesIterator(
           kvIter, comparator, keyClass, valClass, job, Reporter.NULL,
           inCounter);
-      //try combineAndSpill
-      System.out.println("/Volumes/sambashare/Development/hadoop-2.9.1-src/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/task/reduce/MergeManagerImpl.java");
-      System.out.println("values.getKey: try "+ values.getKey());
-
       while (values.more()) {
-        //output get key
-        System.out.println("/Volumes/sambashare/Development/hadoop-2.9.1-src/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/src/main/java/org/apache/hadoop/mapreduce/task/reduce/MergeManagerImpl.java");
-        System.out.println("values.getKey: "+ values.getKey());
         combiner.reduce(values.getKey(), values, combineCollector,
                         Reporter.NULL);
         values.nextKey();

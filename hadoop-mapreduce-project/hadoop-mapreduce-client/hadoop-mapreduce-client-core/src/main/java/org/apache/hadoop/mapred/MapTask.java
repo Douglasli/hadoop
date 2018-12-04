@@ -27,8 +27,6 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
@@ -69,16 +67,14 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormatCounter;
 import org.apache.hadoop.mapreduce.split.JobSplit.TaskSplitIndex;
 import org.apache.hadoop.mapreduce.task.MapContextImpl;
 import org.apache.hadoop.mapreduce.CryptoUtils;
-import org.apache.hadoop.mapreduce.keyStatistic;
 import org.apache.hadoop.util.IndexedSortable;
 import org.apache.hadoop.util.IndexedSorter;
 import org.apache.hadoop.util.Progress;
 import org.apache.hadoop.util.QuickSort;
+import org.apache.hadoop.mapreduce.keyStatistic;
 import org.apache.hadoop.util.ReflectionUtils;
 import org.apache.hadoop.util.StringInterner;
 import org.apache.hadoop.util.StringUtils;
-
-import javax.swing.plaf.synth.SynthEditorPaneUI;
 
 /** A Map task. */
 @InterfaceAudience.LimitedPrivate({"MapReduce"})
@@ -96,8 +92,7 @@ public class MapTask extends Task {
 
   private Progress mapPhase;
   private Progress sortPhase;
-
-
+  
   {   // set phase for this task
     setPhase(TaskStatus.Phase.MAP); 
     getProgress().setStatus("map");
@@ -621,7 +616,6 @@ public class MapTask extends Task {
       try {
         collector.collect(key, value,
                           partitioner.getPartition(key, value, numPartitions));
-        //test for collect usage
       } catch (InterruptedException ie) {
         Thread.currentThread().interrupt();
         throw new IOException("interrupt exception", ie);
@@ -725,7 +719,7 @@ public class MapTask extends Task {
 
     @Override
     public void write(K key, V value) throws IOException, InterruptedException {
-      //find oversized key values, split key
+//find oversized key values, split key
       keyStatistic.keyMapUpdate(key.toString());
       if (key.toString().equals("a") && keyStatistic.get(key.toString())>10){
         key = (K) new org.apache.hadoop.io.Text("a/"+keyStatistic.get(key.toString())/10);
@@ -779,7 +773,7 @@ public class MapTask extends Task {
     
     job.setBoolean(JobContext.SKIP_RECORDS, isSkipping());
     org.apache.hadoop.mapreduce.RecordWriter output = null;
-
+    
     // get an output object
     if (job.getNumReduceTasks() == 0) {
       output = 
@@ -787,7 +781,8 @@ public class MapTask extends Task {
     } else {
       output = new NewOutputCollector(taskContext, job, umbilical, reporter);
     }
-    org.apache.hadoop.mapreduce.MapContext<INKEY, INVALUE, OUTKEY, OUTVALUE>
+
+    org.apache.hadoop.mapreduce.MapContext<INKEY, INVALUE, OUTKEY, OUTVALUE> 
     mapContext = 
       new MapContextImpl<INKEY, INVALUE, OUTKEY, OUTVALUE>(job, getTaskID(), 
           input, output, 
@@ -839,6 +834,7 @@ public class MapTask extends Task {
 
       OutputFormat<K, V> outputFormat = job.getOutputFormat();   
       mapOutputRecordCounter = reporter.getCounter(TaskCounter.MAP_OUTPUT_RECORDS);
+      
       fileOutputByteCounter = reporter
           .getCounter(FileOutputFormatCounter.BYTES_WRITTEN);
 
@@ -1034,7 +1030,6 @@ public class MapTask extends Task {
       fileOutputByteCounter = reporter
           .getCounter(TaskCounter.MAP_OUTPUT_MATERIALIZED_BYTES);
 
-
       // compression
       if (job.getCompressMapOutput()) {
         Class<? extends CompressionCodec> codecClass =
@@ -1054,9 +1049,6 @@ public class MapTask extends Task {
         final Counters.Counter combineOutputCounter =
           reporter.getCounter(TaskCounter.COMBINE_OUTPUT_RECORDS);
         combineCollector= new CombineOutputCollector<K,V>(combineOutputCounter, reporter, job);
-        //test if this has run
-//       // System.out.println("/Volumes/sambashare/Development/hadoop-2.9.1-src/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-jobclient/src/test/java/org/apache/hadoop/mapred/TestReduceTask.java");
-//       // System.out.println("TaskCounter.Map "+ reporter.getCounter(TaskCounter.MAP_OUTPUT_RECORDS).getValue());
       } else {
         combineCollector = null;
       }
@@ -1103,7 +1095,6 @@ public class MapTask extends Task {
         throw new IOException("Illegal partition for " + key + " (" +
             partition + ")");
       }
-
       checkSpillException();
       bufferRemaining -= METASIZE;
       if (bufferRemaining <= 0) {
@@ -1164,6 +1155,7 @@ public class MapTask extends Task {
           spillLock.unlock();
         }
       }
+
       try {
         // serialize key bytes into buffer
         int keystart = bufindex;
@@ -1189,8 +1181,6 @@ public class MapTask extends Task {
         int valend = bb.markRecord();
 
         mapOutputRecordCounter.increment(1);
-
-
         mapOutputByteCounter.increment(
             distanceTo(keystart, valend, bufvoid));
 

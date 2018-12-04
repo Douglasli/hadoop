@@ -21,7 +21,10 @@ package org.apache.hadoop.mapreduce;
 import java.io.IOException;
 import java.net.URI;
 import java.security.PrivilegedExceptionAction;
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,9 +40,9 @@ import org.apache.hadoop.io.RawComparator;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapreduce.filecache.DistributedCache;
 import org.apache.hadoop.mapreduce.protocol.ClientProtocol;
+import org.apache.hadoop.mapreduce.keyStatistic;
 import org.apache.hadoop.mapreduce.task.JobContextImpl;
 import org.apache.hadoop.mapreduce.util.ConfigUtil;
-import org.apache.hadoop.mapreduce.keyStatistic;
 import org.apache.hadoop.util.StringUtils;
 import org.apache.hadoop.yarn.api.records.ReservationId;
 
@@ -815,17 +818,6 @@ public class Job extends JobContextImpl implements JobContext, AutoCloseable {
       return ugi.doAs(new PrivilegedExceptionAction<Counters>() {
         @Override
         public Counters run() throws IOException, InterruptedException {
-          //test get info for client
-          LOG.info("dubidubidu");
-          //test return of getKeyMap function of MapTask.java
-
-//          Map< Object , Integer> keyMap = keyStatistic.getKeyMap();
-//          System.out.println("DDD: Printing out values of key hash map");
-//          keyStatistic.outputKeyMap();
-//          for (Object k: keyMap.keySet()) {
-//            System.out.println("key: " + k);
-//            System.out.println("value: " + keyMap.get(k));
-//          }
           return cluster.getClient().getJobCounters(getJobID());
         }
       });
@@ -1672,9 +1664,8 @@ public class Job extends JobContextImpl implements JobContext, AutoCloseable {
     Counters counters = getCounters();
     if (counters != null) {
       LOG.info(counters.toString());
-
     }
-    System.out.println("DDD: Printing out values of key hash map");
+  System.out.println("DDD: Printing out values of key hash map");
     keyStatistic.outputKeyMap();
     return success;
   }

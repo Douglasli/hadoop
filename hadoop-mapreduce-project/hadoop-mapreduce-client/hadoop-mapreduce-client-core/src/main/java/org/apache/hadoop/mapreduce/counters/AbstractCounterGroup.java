@@ -55,10 +55,6 @@ public abstract class AbstractCounterGroup<T extends Counter>
     this.name = name;
     this.displayName = displayName;
     this.limits = limits;
-//    //test for counter group
-//    System.out.println("name"+name);
-//    System.out.println("displayName"+displayName);
-//    System.out.println("limits"+limits);
   }
 
   @Override
