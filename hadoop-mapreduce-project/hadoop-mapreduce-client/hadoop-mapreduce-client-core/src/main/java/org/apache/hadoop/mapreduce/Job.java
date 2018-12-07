@@ -37,6 +37,7 @@ import org.apache.hadoop.conf.Configuration.IntegerRanges;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.RawComparator;
+import org.apache.hadoop.mapred.FileOutputFormat;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapreduce.filecache.DistributedCache;
 import org.apache.hadoop.mapreduce.protocol.ClientProtocol;
@@ -1583,8 +1584,7 @@ public class Job extends JobContextImpl implements JobContext, AutoCloseable {
    *         <code>JobTracker</code> is lost
    */
   public boolean waitForCompletion(boolean verbose
-                                   ) throws IOException, InterruptedException,
-                                            ClassNotFoundException {
+                                   ) throws Exception {
     if (state == JobState.DEFINE) {
       submit();
     }
@@ -1601,9 +1601,35 @@ public class Job extends JobContextImpl implements JobContext, AutoCloseable {
         }
       }
     }
+
+    //run second round of map reduce
+    if (SecondRoundMapReduce.run(org.apache.hadoop.mapreduce.lib.output.FileOutputFormat.getOutputPath(this), this, conf)){
+    return isSuccessful();
+    }
+    return false;
+  }
+
+  public boolean waitForCompletion(boolean verbose, int time
+                                   ) throws IOException, InterruptedException,
+                                            ClassNotFoundException {
+    if (state == JobState.DEFINE) {
+      submit();
+    }
+    if (verbose) {
+      monitorAndPrintJob();
+    } else {
+      // get the completion poll interval from the client.
+      int completionPollIntervalMillis =
+        Job.getCompletionPollInterval(cluster.getConf());
+      while (!isComplete()) {
+        try {
+          Thread.sleep(completionPollIntervalMillis);
+        } catch (InterruptedException ie) {
+        }
+      }
+    }
     return isSuccessful();
   }
-  
   /**
    * Monitor a job and print status in real-time as progress is made and tasks 
    * fail.
@@ -1665,8 +1691,6 @@ public class Job extends JobContextImpl implements JobContext, AutoCloseable {
     if (counters != null) {
       LOG.info(counters.toString());
     }
-  System.out.println("DDD: Printing out values of key hash map");
-    keyStatistic.outputKeyMap();
     return success;
   }
 

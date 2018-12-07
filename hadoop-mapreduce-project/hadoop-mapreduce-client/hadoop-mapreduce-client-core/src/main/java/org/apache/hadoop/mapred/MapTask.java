@@ -720,13 +720,18 @@ public class MapTask extends Task {
     @Override
     public void write(K key, V value) throws IOException, InterruptedException {
 //find oversized key values, split key
-      keyStatistic.keyMapUpdate(key.toString());
-      if (key.toString().equals("a") && keyStatistic.get(key.toString())>10){
-        key = (K) new org.apache.hadoop.io.Text("a/"+keyStatistic.get(key.toString())/10);
+      if(!keyStatistic.secondRound){
+        keyStatistic.keyMapUpdate(key.toString());
+        if (keyStatistic.get(key.toString())>10){
+          key = (K) new org.apache.hadoop.io.Text(key.toString()+"/"+keyStatistic.get(key.toString())/10);
+        }
       }
       collector.collect(key, value,
                         partitioner.getPartition(key, value, partitions));
     }
+
+
+
 
     @Override
     public void close(TaskAttemptContext context

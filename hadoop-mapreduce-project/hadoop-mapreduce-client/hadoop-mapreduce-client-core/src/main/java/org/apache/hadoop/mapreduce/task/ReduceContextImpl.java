@@ -169,6 +169,11 @@ public class ReduceContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
   }
 
   public KEYIN getCurrentKey() {
+    // delete appendix
+    int pos = key.toString().indexOf("/");
+    if (pos > 0){
+      key = (KEYIN) new org.apache.hadoop.io.Text(key.toString().substring(0,pos));
+    }
     return key;
   }
 

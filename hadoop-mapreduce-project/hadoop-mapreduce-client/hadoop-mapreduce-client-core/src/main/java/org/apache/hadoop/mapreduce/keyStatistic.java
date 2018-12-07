@@ -15,6 +15,8 @@ public class keyStatistic {
         return keyMap;
     }
 
+    public static boolean secondRound = false;
+
     public  static void keyMapUpdate(String key){
         //key counters: 11/28
 //        if (keyMap.containsKey(key)){
@@ -34,4 +36,6 @@ public class keyStatistic {
         System.out.println("key, value: " + java.util.Arrays.asList(keyMap));
     }
     public static int get(String key){return keyMap.get(key).intValue();}
+    public static void clear(){keyMap.clear();}
+    public static void setSecondRound(){secondRound = true;}
 }
