@@ -25,7 +25,11 @@ public class SecondRoundMapReduce {
 
         public void map(Object key, Text value, Context context
         ) throws IOException, InterruptedException {
+
                 String [] row = value.toString().split("\t");
+                if (row.length < 2){
+                    return;
+                }
                 word.set(row[0]);
                 v = new IntWritable(Integer.parseInt(row[1]));
                 context.write(word, v);
@@ -48,13 +52,14 @@ public class SecondRoundMapReduce {
         }
     }
 
-    public static boolean run(Path path, JobContext jobContext, JobConf jobConf)throws Exception {
+    public static boolean run(Path path, JobConf jobConf)throws Exception {
         keyStatistic.setSecondRound();
         Configuration conf = new Configuration(jobConf);
         System.out.println("DUBUDUBUDU");
         Job job = Job.getInstance(conf, "second");
         job.setJarByClass(SecondRoundMapReduce.class);
-        job.setMapperClass(SecondRoundMap.class);
+        job.setMapperClass(org.apache.hadoop.mapreduce.SecondRoundMapReduce.SecondRoundMap.class);
+        job.setNumReduceTasks(1);
 //        job.setCombinerClass(IntSumReducer.class);
 //        job.setReducerClass(IntSumReducer.class);
 //        job.setOutputKeyClass(Text.class);

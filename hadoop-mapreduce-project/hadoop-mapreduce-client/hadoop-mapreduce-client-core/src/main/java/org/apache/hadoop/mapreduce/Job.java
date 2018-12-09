@@ -1603,7 +1603,7 @@ public class Job extends JobContextImpl implements JobContext, AutoCloseable {
     }
 
     //run second round of map reduce
-    if (SecondRoundMapReduce.run(org.apache.hadoop.mapreduce.lib.output.FileOutputFormat.getOutputPath(this), this, conf)){
+    if (SecondRoundMapReduce.run(org.apache.hadoop.mapreduce.lib.output.FileOutputFormat.getOutputPath(this),  conf)){
     return isSuccessful();
     }
     return false;
