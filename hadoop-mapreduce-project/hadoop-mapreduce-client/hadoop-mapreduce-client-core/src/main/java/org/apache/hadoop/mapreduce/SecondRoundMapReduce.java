@@ -52,7 +52,8 @@ public class SecondRoundMapReduce {
         }
     }
 
-    public static boolean run(Path path, JobConf jobConf)throws Exception {
+    public static boolean run(Path path, JobConf jobConf)throws IOException, InterruptedException,
+            ClassNotFoundException  {
         keyStatistic.setSecondRound();
         Configuration conf = new Configuration(jobConf);
         System.out.println("DUBUDUBUDU");
